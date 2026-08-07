@@ -4,7 +4,9 @@ Open the hosted link, or run locally from this folder.
 
 ## Share / view online
 
-Use the GitHub Pages URL for this repo (see the repo homepage after deploy).
+**Live prototype:** [https://diksha-kathayat.github.io/evodental-prototype/](https://diksha-kathayat.github.io/evodental-prototype/)
+
+Repo: [https://github.com/diksha-kathayat/evodental-prototype](https://github.com/diksha-kathayat/evodental-prototype)
 
 ## Run locally
 
