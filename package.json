@@ -1,0 +1,8 @@
+{
+  "name": "evodental-prototype",
+  "private": true,
+  "description": "EvoDental clickable HTML prototype",
+  "scripts": {
+    "start": "npx --yes serve -l 4173 ."
+  }
+}
