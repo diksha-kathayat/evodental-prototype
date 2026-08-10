@@ -3366,6 +3366,93 @@
         min-height: 0;
       }
 
+      .q-fields {
+        display: grid;
+        gap: 0.95rem;
+      }
+      .q-form-steps {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        margin: 0 0 0.35rem;
+      }
+      .q-form-steps .dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 0.78rem;
+        font-weight: 700;
+        background: var(--gray-200);
+        color: var(--muted);
+      }
+      .q-form-steps .dot.on {
+        background: var(--navy);
+        color: #fff;
+      }
+      .q-form-steps .line {
+        width: 36px;
+        height: 2px;
+        background: var(--gray-200);
+      }
+      .q-form-steps .line.on {
+        background: var(--navy);
+      }
+      .q-form-steps-labels {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 0 0 0.85rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .q-form-steps-labels span.on {
+        color: var(--navy);
+      }
+      .q-field-section {
+        margin: 0.15rem 0 0;
+        padding-top: 0.55rem;
+        border-top: 1px solid var(--gray-200);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--navy);
+      }
+      .q-field label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--navy);
+        margin-bottom: 0.35rem;
+      }
+      .q-field label .req {
+        color: var(--danger);
+      }
+      .q-field .hint {
+        margin: 0.3rem 0 0;
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .q-field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+      }
+      .q-field-row.three {
+        grid-template-columns: 0.7fr 1fr 1fr;
+      }
+      .q-field select.q-text {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475a73' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.9rem center;
+        padding-right: 2.2rem;
+      }
+
       .q-footer {
         flex-shrink: 0;
         padding: 0.75rem var(--screen-pad) calc(0.75rem + var(--home-indicator-h));
@@ -5022,6 +5109,7 @@
 
       const TASK_META = {
         journey: "Your Evodental Journey",
+        preAssessment: "Pre-assessment form",
         worry: "What worries you most?",
         explore: "Your treatment pathway",
         prepAssessment: "Preparing for your assessment call",
@@ -5037,6 +5125,7 @@
 
       const ASSESSMENT_ORDER = [
         "journey",
+        "preAssessment",
         "explore",
         "worry",
         "prepAssessment",
@@ -5048,6 +5137,42 @@
         "decisionReadiness",
         "prepConsultation",
         "afterConsultation",
+      ];
+
+      const TOOTH_COUNT_OPTS = [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+      ];
+      const CLINIC_OPTS = [
+        "Belfast",
+        "Birmingham",
+        "Bristol",
+        "Cardiff",
+        "Edinburgh",
+        "Glasgow",
+        "Leeds",
+        "Liverpool",
+        "London — Harley Street",
+        "Manchester",
+        "Newcastle",
+        "Nottingham",
+        "Southampton",
+        "Online / not sure yet",
       ];
 
       function rich(parts) {
@@ -5234,6 +5359,186 @@
                   ${clinicContactHtml({ note: "Prefer to talk now?" })}
                 </div>`,
             }),
+          ],
+        },
+
+        preAssessment: {
+          title: "Pre-assessment form",
+          steps: [
+            rich({
+              title: "Pre-assessment form",
+              html: `
+                <div class="viz">
+                  <p class="viz-kicker">Before your assessment call</p>
+                  <p class="viz-line">A short triage so the clinical team can prepare — patient details first, then dental history.</p>
+                  <div class="viz-rail">
+                    <div class="viz-rail-item"><span class="viz-rail-num">1</span><div><strong>Patient information</strong><span>Basics &amp; how you found us</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">2</span><div><strong>Triage</strong><span>Dental history &amp; clinic preference</span></div></div>
+                  </div>
+                  <p class="viz-tag">Takes a few minutes</p>
+                </div>`,
+            }),
+            {
+              type: "fields",
+              title: "Patient information",
+              formStep: 1,
+              formStepLabel: "Patient information",
+              fields: [
+                {
+                  key: "todayDate",
+                  label: "Today's date",
+                  type: "date",
+                  hint: "dd/MM/yyyy",
+                  defaultToday: true,
+                },
+                {
+                  key: "gender",
+                  label: "Gender",
+                  type: "select",
+                  required: true,
+                  options: ["Female", "Male", "Non-binary", "Prefer not to say", "Other"],
+                },
+                {
+                  key: "dob",
+                  label: "Date of birth",
+                  type: "date",
+                  required: true,
+                  hint: "dd/MM/yyyy — please select the correct year",
+                },
+                {
+                  key: "street",
+                  label: "Street address",
+                  type: "text",
+                  required: true,
+                  placeholder: "Street address",
+                },
+                {
+                  key: "address2",
+                  label: "Address line 2",
+                  type: "text",
+                  placeholder: "Flat, building (optional)",
+                },
+                {
+                  key: "city",
+                  label: "City",
+                  type: "text",
+                  required: true,
+                  row: "city",
+                },
+                {
+                  key: "region",
+                  label: "State / region / province",
+                  type: "text",
+                  row: "city",
+                },
+                {
+                  key: "postcode",
+                  label: "Postal / zip code",
+                  type: "text",
+                  required: true,
+                  row: "post",
+                },
+                {
+                  key: "country",
+                  label: "Country",
+                  type: "select",
+                  required: true,
+                  options: ["United Kingdom", "Ireland", "Other"],
+                  defaultValue: "United Kingdom",
+                  row: "post",
+                },
+                {
+                  key: "heardAbout",
+                  label: "Can you remember how you first learned of EvoDental?",
+                  type: "select",
+                  required: true,
+                  options: [
+                    "Google / search",
+                    "Social media",
+                    "Friend or family recommendation",
+                    "TV or radio",
+                    "Newspaper / magazine",
+                    "Returning patient",
+                    "Other",
+                  ],
+                },
+              ],
+            },
+            {
+              type: "fields",
+              title: "Triage",
+              formStep: 2,
+              formStepLabel: "Triage",
+              fields: [
+                {
+                  key: "clinic",
+                  label: "Clinic for FCA",
+                  type: "select",
+                  required: true,
+                  options: CLINIC_OPTS,
+                },
+                { type: "section", label: "Dental history" },
+                {
+                  key: "problems",
+                  label: "What oral health or dental problems are you experiencing?",
+                  type: "textarea",
+                  placeholder: "Describe what you’re dealing with…",
+                },
+                {
+                  key: "jaws",
+                  label: "Which jaw(s) are you looking to receive treatment on?",
+                  type: "select",
+                  options: ["Upper jaw", "Lower jaw", "Both jaws", "Not sure yet"],
+                },
+                {
+                  key: "teethTop",
+                  label: "How many teeth do you have in your top jaw?",
+                  type: "select",
+                  required: true,
+                  options: TOOTH_COUNT_OPTS,
+                },
+                {
+                  key: "teethBottom",
+                  label: "How many teeth do you have in your bottom jaw?",
+                  type: "select",
+                  required: true,
+                  options: TOOTH_COUNT_OPTS,
+                },
+                {
+                  key: "problemTop",
+                  label: "How many teeth give you problems in your top jaw? (approx)",
+                  type: "select",
+                  required: true,
+                  options: TOOTH_COUNT_OPTS,
+                },
+                {
+                  key: "problemBottom",
+                  label: "How many teeth give you problems in your bottom jaw? (approx)",
+                  type: "select",
+                  required: true,
+                  options: TOOTH_COUNT_OPTS,
+                },
+                {
+                  key: "frontBack",
+                  label: "Are they front or back teeth?",
+                  type: "select",
+                  required: true,
+                  options: ["Front", "Back", "Both", "Not sure"],
+                },
+                {
+                  key: "improvements",
+                  label: "What changes or improvements are you seeking from treatment?",
+                  type: "textarea",
+                  placeholder: "What would you like to change…",
+                },
+                {
+                  key: "medicalHistory",
+                  label: "Medical history: conditions, medications, allergies, smoke?",
+                  type: "textarea",
+                  placeholder: "Share anything relevant for your nurse…",
+                },
+              ],
+            },
           ],
         },
 
@@ -5928,7 +6233,13 @@
           reached: "enquiry",
           nextMilestone: "triage",
           headline: "Journey started",
-          body: "You know what sits ahead. Next: explore your treatment pathway.",
+          body: "You know what sits ahead. Next: your pre-assessment (triage) form.",
+        },
+        preAssessment: {
+          reached: "enquiry",
+          nextMilestone: "triage",
+          headline: "Pre-assessment complete",
+          body: "Thanks — the team can prepare. Next: explore your treatment pathway.",
         },
         explore: {
           reached: "enquiry",
@@ -6720,6 +7031,136 @@
         });
       }
 
+      function todayIsoDate() {
+        const d = new Date();
+        const dd = String(d.getDate()).padStart(2, "0");
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        return `${d.getFullYear()}-${mm}-${dd}`;
+      }
+
+      function ensureFieldAnswers(stepIndex, fields) {
+        if (!qAnswers[stepIndex] || typeof qAnswers[stepIndex] !== "object") {
+          qAnswers[stepIndex] = {};
+        }
+        const ans = qAnswers[stepIndex];
+        fields.forEach((f) => {
+          if (!f.key || f.type === "section") return;
+          if (ans[f.key] !== undefined && ans[f.key] !== null && ans[f.key] !== "") return;
+          if (f.defaultToday) ans[f.key] = todayIsoDate();
+          else if (f.defaultValue != null) ans[f.key] = f.defaultValue;
+          else ans[f.key] = "";
+        });
+        return ans;
+      }
+
+      function renderFieldsStep(body, step, stepIndex) {
+        const fields = step.fields || [];
+        const ans = ensureFieldAnswers(stepIndex, fields);
+        const wrap = document.createElement("div");
+        wrap.className = "q-fields";
+
+        if (step.formStep) {
+          const steppers = document.createElement("div");
+          steppers.innerHTML = `
+            <div class="q-form-steps" aria-hidden="true">
+              <span class="dot ${step.formStep >= 1 ? "on" : ""}">1</span>
+              <span class="line ${step.formStep >= 2 ? "on" : ""}"></span>
+              <span class="dot ${step.formStep >= 2 ? "on" : ""}">2</span>
+            </div>
+            <div class="q-form-steps-labels">
+              <span class="${step.formStep === 1 ? "on" : ""}">Patient information</span>
+              <span class="${step.formStep === 2 ? "on" : ""}">Triage</span>
+            </div>`;
+          wrap.appendChild(steppers);
+        }
+
+        let i = 0;
+        while (i < fields.length) {
+          const f = fields[i];
+          if (f.type === "section") {
+            const sec = document.createElement("p");
+            sec.className = "q-field-section";
+            sec.textContent = f.label || "";
+            wrap.appendChild(sec);
+            i += 1;
+            continue;
+          }
+
+          if (f.row) {
+            const rowKey = f.row;
+            const group = [];
+            while (i < fields.length && fields[i].row === rowKey) {
+              group.push(fields[i]);
+              i += 1;
+            }
+            const row = document.createElement("div");
+            row.className = "q-field-row" + (group.length >= 3 ? " three" : "");
+            group.forEach((gf) => row.appendChild(buildFieldEl(gf, ans, stepIndex)));
+            wrap.appendChild(row);
+            continue;
+          }
+
+          wrap.appendChild(buildFieldEl(f, ans, stepIndex));
+          i += 1;
+        }
+
+        body.appendChild(wrap);
+      }
+
+      function buildFieldEl(f, ans, stepIndex) {
+        const box = document.createElement("div");
+        box.className = "q-field";
+        const label = document.createElement("label");
+        label.innerHTML = `${f.label || ""}${f.required ? ' <span class="req">*</span>' : ""}`;
+        box.appendChild(label);
+
+        let input;
+        if (f.type === "select") {
+          input = document.createElement("select");
+          input.className = "q-text";
+          const blank = document.createElement("option");
+          blank.value = "";
+          blank.textContent = "Select…";
+          input.appendChild(blank);
+          (f.options || []).forEach((opt) => {
+            const o = document.createElement("option");
+            o.value = opt;
+            o.textContent = opt;
+            input.appendChild(o);
+          });
+        } else if (f.type === "textarea") {
+          input = document.createElement("textarea");
+          input.className = "q-textarea";
+          input.rows = 4;
+          input.placeholder = f.placeholder || "";
+        } else {
+          input = document.createElement("input");
+          input.className = "q-text";
+          input.type = f.type === "date" || f.type === "tel" || f.type === "email" ? f.type : "text";
+          input.placeholder = f.placeholder || "";
+        }
+
+        input.value = ans[f.key] || "";
+        input.disabled = qViewOnly;
+        input.addEventListener("input", () => {
+          if (!qAnswers[stepIndex] || typeof qAnswers[stepIndex] !== "object") qAnswers[stepIndex] = {};
+          qAnswers[stepIndex][f.key] = input.value;
+        });
+        input.addEventListener("change", () => {
+          if (!qAnswers[stepIndex] || typeof qAnswers[stepIndex] !== "object") qAnswers[stepIndex] = {};
+          qAnswers[stepIndex][f.key] = input.value;
+        });
+        box.appendChild(input);
+
+        if (f.hint) {
+          const hint = document.createElement("p");
+          hint.className = "hint";
+          hint.textContent = f.hint;
+          box.appendChild(hint);
+        }
+        return box;
+      }
+
       function renderChoiceStep(body, step, stepIndex) {
         const wrap = document.createElement("div");
         wrap.className = "q-options";
@@ -6878,6 +7319,8 @@
           p.style.cssText = "margin:0;color:var(--muted);line-height:1.55;white-space:pre-line;";
           p.textContent = step.body;
           body.appendChild(p);
+        } else if (step.type === "fields") {
+          renderFieldsStep(body, step, qStep);
         } else if (step.type === "single" || step.type === "multi") {
           renderChoiceStep(body, step, qStep);
         } else if (step.type === "text") {
