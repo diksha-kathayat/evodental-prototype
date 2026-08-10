@@ -3454,11 +3454,25 @@
         padding: 0;
         background: transparent;
       }
-      .q-fields .wg-input.labeled input,
-      .q-fields .wg-input.labeled textarea {
+      .q-fields .wg-free-text {
+        display: grid;
+        gap: 0.5rem;
+      }
+      .q-fields .wg-free-text > .stack-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--gray-500);
+        margin: 0;
+      }
+      .q-fields .wg-free-text .control {
+        position: relative;
+      }
+      .q-fields .wg-free-text input,
+      .q-fields .wg-free-text textarea {
         border: 1px solid var(--gray-300);
         border-radius: 8px;
         padding: 0.85rem 1rem;
+        padding-right: 2.75rem;
         min-height: 48px;
         font: inherit;
         font-size: 1rem;
@@ -3466,16 +3480,42 @@
         background: var(--white);
         width: 100%;
       }
-      .q-fields .wg-input.labeled textarea {
+      .q-fields .wg-free-text textarea {
         min-height: 110px;
         resize: vertical;
         line-height: 1.45;
+        padding-top: 0.875rem;
+        padding-bottom: 0.875rem;
       }
-      .q-fields .wg-input.labeled input:focus,
-      .q-fields .wg-input.labeled textarea:focus {
+      .q-fields .wg-free-text input:focus,
+      .q-fields .wg-free-text textarea:focus {
         outline: none;
-        border: 2px solid var(--accent);
-        padding: calc(0.85rem - 1px) calc(1rem - 1px);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent);
+      }
+      .q-fields .wg-free-text .clear-btn {
+        position: absolute;
+        right: 0.65rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        border: 0;
+        padding: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--gray-400);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+      }
+      .q-fields .wg-free-text textarea ~ .clear-btn {
+        top: 1.15rem;
+        transform: none;
+      }
+      .q-fields .wg-free-text .clear-btn svg {
+        width: 18px;
+        height: 18px;
       }
       .q-fields .wg-choices {
         display: grid;
@@ -3551,22 +3591,127 @@
         flex-shrink: 0;
         color: var(--accent);
       }
-      .q-fields .wg-dropdown-panel {
+
+      /* WeGuide-style search-select popup */
+      .select-sheet-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 85;
         display: none;
-        margin-top: 0.5rem;
+        background: var(--white);
+        flex-direction: column;
       }
-      .q-fields .wg-dropdown-panel.open {
+      .select-sheet-overlay.open {
+        display: flex;
+      }
+      .select-sheet-overlay .sheet-header {
+        flex-shrink: 0;
+        display: grid;
+        grid-template-columns: 72px 1fr 72px;
+        align-items: center;
+        min-height: var(--toolbar-h);
+        padding: 0 8px;
+        border-bottom: 1px solid var(--gray-200);
+        background: var(--white);
+      }
+      .select-sheet-overlay .sheet-header .back {
+        border: 0;
+        background: transparent;
+        color: var(--accent);
+        font: inherit;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        text-align: left;
+        padding: 8px;
+      }
+      .select-sheet-overlay .sheet-header .title {
+        text-align: center;
+        font-family: var(--font-heading);
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--navy);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .select-sheet-overlay .sheet-body {
+        flex: 1;
+        overflow: auto;
+        padding: 1rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .select-sheet-overlay .sheet-search {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        min-height: 48px;
+        padding: 0 0.85rem;
+        margin-bottom: 1rem;
+        background: var(--white);
+      }
+      .select-sheet-overlay .sheet-search input {
+        flex: 1;
+        border: 0;
+        outline: none;
+        font: inherit;
+        font-size: 1rem;
+        color: var(--navy);
+        background: transparent;
+        min-width: 0;
+      }
+      .select-sheet-overlay .sheet-search svg {
+        width: 20px;
+        height: 20px;
+        color: var(--gray-400);
+        flex-shrink: 0;
+      }
+      .select-sheet-overlay .sheet-choices {
         display: grid;
         gap: 0.5rem;
       }
-      .q-field-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+      .select-sheet-overlay .wg-choice {
+        display: flex;
+        align-items: center;
         gap: 0.75rem;
-        align-items: start;
+        width: 100%;
+        min-height: 56px;
+        text-align: left;
+        border: 2px solid transparent;
+        border-radius: 1rem;
+        background: var(--gray-100);
+        padding: 0.85rem 1rem;
+        font: inherit;
+        font-family: var(--font-heading);
+        font-weight: 500;
+        color: var(--navy);
+        cursor: pointer;
       }
-      .q-field-row.three {
-        grid-template-columns: 0.7fr 1fr 1fr;
+      .select-sheet-overlay .wg-choice .radio {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid var(--gray-400);
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        background: #fff;
+      }
+      .select-sheet-overlay .wg-choice.is-on {
+        background: var(--secondary);
+        border-color: var(--accent);
+      }
+      .select-sheet-overlay .wg-choice.is-on .radio {
+        border-color: var(--accent);
+      }
+      .select-sheet-overlay .wg-choice.is-on .radio::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
       }
 
       .q-footer {
@@ -4730,6 +4875,21 @@
           </div>
         </div>
 
+        <div class="select-sheet-overlay" id="selectSheet" aria-hidden="true">
+          <div class="sheet-header">
+            <button type="button" class="back" id="selectSheetBack">Back</button>
+            <div class="title" id="selectSheetTitle">Select</div>
+            <span></span>
+          </div>
+          <div class="sheet-body">
+            <div class="sheet-search">
+              <input type="search" id="selectSheetSearch" placeholder="Search" autocomplete="off" />
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.75"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+            </div>
+            <div class="sheet-choices" id="selectSheetChoices"></div>
+          </div>
+        </div>
+
         <div class="legal-doc-overlay" id="legalDocOverlay">
           <div class="legal-doc-sheet" role="dialog" aria-modal="true">
             <header>
@@ -5539,20 +5699,17 @@
                   label: "City",
                   type: "text",
                   required: true,
-                  row: "city",
                 },
                 {
                   key: "region",
                   label: "State / region / province",
                   type: "text",
-                  row: "city",
                 },
                 {
                   key: "postcode",
                   label: "Postal / zip code",
                   type: "text",
                   required: true,
-                  row: "post",
                 },
                 {
                   key: "country",
@@ -5561,7 +5718,6 @@
                   required: true,
                   options: ["United Kingdom", "Ireland", "Other"],
                   defaultValue: "United Kingdom",
-                  row: "post",
                 },
                 {
                   key: "heardAbout",
@@ -6338,7 +6494,8 @@
 
       const MILESTONES = [
         { id: "enquiry", title: "Enquiry", text: "You’re exploring whether EvoDental is right for you." },
-        { id: "triage", title: "Assessment call", text: "Speak with the team and share baseline details." },
+        { id: "preAssessment", title: "Pre-assessment", text: "Share baseline details and dental history so the team can prepare." },
+        { id: "triage", title: "Assessment call", text: "Speak with the team about your situation and next steps." },
         { id: "fca", title: "Free clinical assessment", text: "A free, no-obligation visit — about 90 minutes." },
         { id: "decision", title: "Decide together", text: "Review your plan, costs and timing — with no pressure." },
         { id: "surgery", title: "Book surgery", text: "When you feel ready — the next step toward your new smile." },
@@ -6347,24 +6504,24 @@
       const FORM_MILESTONE = {
         journey: {
           reached: "enquiry",
-          nextMilestone: "triage",
+          nextMilestone: "preAssessment",
           headline: "Journey started",
-          body: "You know what sits ahead. Next: your pre-assessment (triage) form.",
+          body: "You know what sits ahead. Next: your pre-assessment form.",
         },
         preAssessment: {
-          reached: "enquiry",
+          reached: "preAssessment",
           nextMilestone: "triage",
           headline: "Pre-assessment complete",
           body: "Thanks — the team can prepare. Next: explore your treatment pathway.",
         },
         explore: {
-          reached: "enquiry",
+          reached: "preAssessment",
           nextMilestone: "triage",
           headline: "Pathway explored",
           body: "Next: a soft check-in on what worries you most.",
         },
         worry: {
-          reached: "enquiry",
+          reached: "preAssessment",
           nextMilestone: "triage",
           headline: "We’ve noted what matters",
           body: "Next: prepare for your assessment call — including a light medical history for your nurse.",
@@ -7190,35 +7347,16 @@
           wrap.appendChild(steppers);
         }
 
-        let i = 0;
-        while (i < fields.length) {
-          const f = fields[i];
+        fields.forEach((f) => {
           if (f.type === "section") {
             const sec = document.createElement("p");
             sec.className = "q-field-section";
             sec.textContent = f.label || "";
             wrap.appendChild(sec);
-            i += 1;
-            continue;
+            return;
           }
-
-          if (f.row) {
-            const rowKey = f.row;
-            const group = [];
-            while (i < fields.length && fields[i].row === rowKey) {
-              group.push(fields[i]);
-              i += 1;
-            }
-            const row = document.createElement("div");
-            row.className = "q-field-row" + (group.length >= 3 ? " three" : "");
-            group.forEach((gf) => row.appendChild(buildFieldEl(gf, ans, stepIndex)));
-            wrap.appendChild(row);
-            continue;
-          }
-
           wrap.appendChild(buildFieldEl(f, ans, stepIndex));
-          i += 1;
-        }
+        });
 
         body.appendChild(wrap);
       }
@@ -7226,6 +7364,67 @@
       function setFieldAnswer(stepIndex, key, value) {
         if (!qAnswers[stepIndex] || typeof qAnswers[stepIndex] !== "object") qAnswers[stepIndex] = {};
         qAnswers[stepIndex][key] = value;
+      }
+
+      let selectSheetCtx = null;
+
+      function closeSelectSheet() {
+        const sheet = document.getElementById("selectSheet");
+        if (!sheet) return;
+        sheet.classList.remove("open");
+        sheet.setAttribute("aria-hidden", "true");
+        selectSheetCtx = null;
+        const search = document.getElementById("selectSheetSearch");
+        if (search) search.value = "";
+      }
+
+      function renderSelectSheetChoices(filterQ) {
+        const list = document.getElementById("selectSheetChoices");
+        if (!list || !selectSheetCtx) return;
+        const q = (filterQ || "").trim().toLowerCase();
+        const selected = selectSheetCtx.selected;
+        list.innerHTML = "";
+        selectSheetCtx.options
+          .filter((opt) => !q || opt.toLowerCase().includes(q))
+          .forEach((opt) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "wg-choice" + (selected === opt ? " is-on" : "");
+            btn.innerHTML = `<span class="radio" aria-hidden="true"></span><span>${opt}</span>`;
+            btn.addEventListener("click", () => {
+              setFieldAnswer(selectSheetCtx.stepIndex, selectSheetCtx.key, opt);
+              closeSelectSheet();
+              renderQuestion();
+            });
+            list.appendChild(btn);
+          });
+      }
+
+      function openSelectSheet({ title, options, selected, stepIndex, key }) {
+        selectSheetCtx = { title, options, selected, stepIndex, key };
+        const sheet = document.getElementById("selectSheet");
+        const titleEl = document.getElementById("selectSheetTitle");
+        const search = document.getElementById("selectSheetSearch");
+        if (!sheet) return;
+        if (titleEl) titleEl.textContent = title || "Select";
+        if (search) search.value = "";
+        renderSelectSheetChoices("");
+        sheet.classList.add("open");
+        sheet.setAttribute("aria-hidden", "false");
+        if (search) setTimeout(() => search.focus(), 50);
+      }
+
+      function bindSelectSheet() {
+        const back = document.getElementById("selectSheetBack");
+        const search = document.getElementById("selectSheetSearch");
+        if (back && !back.dataset.bound) {
+          back.dataset.bound = "1";
+          back.addEventListener("click", closeSelectSheet);
+        }
+        if (search && !search.dataset.bound) {
+          search.dataset.bound = "1";
+          search.addEventListener("input", () => renderSelectSheetChoices(search.value));
+        }
       }
 
       function buildFieldEl(f, ans, stepIndex) {
@@ -7279,44 +7478,38 @@
             ? `<span class="val">${selected}</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
             : `<span class="ph">Click to select</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-          const panel = document.createElement("div");
-          panel.className = "wg-dropdown-panel";
-          opts.forEach((opt) => {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "wg-choice" + (selected === opt ? " is-on" : "");
-            btn.innerHTML = `<span class="radio" aria-hidden="true"></span><span>${opt}</span>`;
-            if (!qViewOnly) {
-              btn.addEventListener("click", () => {
-                setFieldAnswer(stepIndex, f.key, opt);
-                renderQuestion();
-              });
-            } else {
-              btn.disabled = true;
-            }
-            panel.appendChild(btn);
-          });
-
           if (!qViewOnly) {
             trigger.addEventListener("click", () => {
-              panel.classList.toggle("open");
+              openSelectSheet({
+                title: f.label || "Select",
+                options: opts,
+                selected: ans[f.key] || "",
+                stepIndex,
+                key: f.key,
+              });
             });
           } else {
             trigger.disabled = true;
           }
 
           box.appendChild(trigger);
-          box.appendChild(panel);
           return box;
         }
 
-        const inputWrap = document.createElement("div");
-        inputWrap.className = "wg-input labeled";
+        const free = document.createElement("div");
+        free.className = "wg-free-text";
+        const stack = document.createElement("p");
+        stack.className = "stack-label";
+        stack.textContent = f.placeholder || (f.type === "date" ? "Date" : "Your answer");
+        free.appendChild(stack);
+
+        const control = document.createElement("div");
+        control.className = "control";
 
         let input;
         if (f.type === "textarea") {
           input = document.createElement("textarea");
-          input.rows = 4;
+          input.rows = 3;
           input.placeholder = f.placeholder || "Type your answer…";
         } else {
           input = document.createElement("input");
@@ -7325,10 +7518,38 @@
         }
         input.value = ans[f.key] || "";
         input.disabled = qViewOnly;
-        input.addEventListener("input", () => setFieldAnswer(stepIndex, f.key, input.value));
-        input.addEventListener("change", () => setFieldAnswer(stepIndex, f.key, input.value));
-        inputWrap.appendChild(input);
-        box.appendChild(inputWrap);
+
+        const clearBtn = document.createElement("button");
+        clearBtn.type = "button";
+        clearBtn.className = "clear-btn";
+        clearBtn.setAttribute("aria-label", "Clear");
+        clearBtn.innerHTML = `<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0Zm2.833 5.76 1.414 1.414L11.415 10l2.834 2.831-1.413 1.415L10 11.421 7.178 14.243 5.764 12.83 8.586 10.007 5.76 7.186l1.414-1.415L10 8.593l2.833-2.833Z"/></svg>`;
+        clearBtn.hidden = !input.value || qViewOnly;
+
+        const syncClear = () => {
+          clearBtn.hidden = !input.value || qViewOnly;
+        };
+        input.addEventListener("input", () => {
+          setFieldAnswer(stepIndex, f.key, input.value);
+          syncClear();
+        });
+        input.addEventListener("change", () => {
+          setFieldAnswer(stepIndex, f.key, input.value);
+          syncClear();
+        });
+        if (!qViewOnly) {
+          clearBtn.addEventListener("click", () => {
+            input.value = "";
+            setFieldAnswer(stepIndex, f.key, "");
+            syncClear();
+            input.focus();
+          });
+        }
+
+        control.appendChild(input);
+        control.appendChild(clearBtn);
+        free.appendChild(control);
+        box.appendChild(free);
         return box;
       }
 
@@ -7567,8 +7788,10 @@
       // Task buttons are bound in renderHomeTasks() as the journey progresses
       renderHomeTasks();
       bindResourcesHub();
+      bindSelectSheet();
 
       document.getElementById("qExit").addEventListener("click", () => {
+        closeSelectSheet();
         go("home");
       });
 
