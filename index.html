@@ -403,6 +403,11 @@
         border: 0;
       }
 
+      .ion-button.primary-light {
+        background: #6b849e;
+        color: #ffffff !important;
+      }
+
       .ion-button.logout {
         background: #fee2e2;
         color: #dc2626;
@@ -613,26 +618,92 @@
 
       .screen[data-screen="website"] {
         background: #fff;
-        padding-top: var(--status-h);
       }
-      .screen[data-screen="website"] .web-chrome {
-        flex-shrink: 0;
+      .screen[data-screen="website"] .web-frame {
+        flex: 1;
+        min-height: 0;
+        border: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+      }
+
+      /* Persistent Safari chrome */
+      #safariShellTop,
+      #safariShellBottom {
+        display: none;
+        z-index: 25;
         background: #f2f2f7;
+      }
+      .phone-screen.has-safari #safariShellTop {
+        display: block;
+        position: absolute;
+        top: var(--status-h);
+        left: 0;
+        right: 0;
         border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         padding: 6px 8px 10px;
       }
-      .screen[data-screen="website"] .web-chrome-row {
+      .phone-screen.has-safari #safariShellBottom {
+        display: flex;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        align-items: center;
+        justify-content: space-around;
+        padding: 8px 12px calc(8px + var(--home-indicator-h));
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      .phone-screen.has-safari.has-tabs #safariShellBottom {
+        display: none;
+      }
+      .phone-screen.has-safari .screen {
+        top: calc(var(--status-h) + 52px);
+        bottom: calc(52px + var(--home-indicator-h));
+      }
+      .phone-screen.has-safari.has-tabs .screen {
+        bottom: calc(var(--tabbar-h) + var(--home-indicator-h));
+      }
+      .phone-screen.has-safari .home-indicator {
+        display: none;
+      }
+      .phone-screen.has-safari.has-tabs .home-indicator {
+        display: block;
+      }
+      /* Screens sit below Safari chrome — don't double-count status/home insets */
+      .phone-screen.has-safari .ion-header {
+        padding-top: 0;
+      }
+      .phone-screen.has-safari .ion-header.landing-header {
+        padding: 0.35rem var(--screen-pad) 0;
+      }
+      .phone-screen.has-safari .screen[data-screen="onboarding"] .landing-header {
+        padding-top: 0.35rem;
+      }
+      .phone-screen.has-safari .ion-footer {
+        padding-bottom: 0.65rem;
+      }
+      .phone-screen.has-safari .screen[data-screen="splash"] .splash-inner {
+        padding: 12px 40px 40px;
+      }
+      .phone-screen.has-safari .screen[data-screen="splash"] .splash-version {
+        bottom: 28px;
+      }
+      .web-chrome-row {
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-items: center;
         gap: 8px;
       }
-      .screen[data-screen="website"] .safari-nav {
+      .safari-nav {
         display: flex;
         align-items: center;
         gap: 2px;
       }
-      .screen[data-screen="website"] .safari-btn {
+      .safari-btn,
+      .safari-tabs,
+      #safariShellBottom button {
         width: 34px;
         height: 34px;
         border: 0;
@@ -644,15 +715,22 @@
         cursor: pointer;
         padding: 0;
       }
-      .screen[data-screen="website"] .safari-btn:disabled {
+      #safariShellBottom button {
+        width: 44px;
+        height: 36px;
+      }
+      .safari-btn:disabled,
+      #safariShellBottom button:disabled {
         color: rgba(0, 122, 255, 0.28);
         cursor: default;
       }
-      .screen[data-screen="website"] .safari-btn svg {
+      .safari-btn svg,
+      .safari-tabs svg,
+      #safariShellBottom svg {
         width: 22px;
         height: 22px;
       }
-      .screen[data-screen="website"] .web-url {
+      .web-url {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -664,65 +742,16 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
         min-width: 0;
       }
-      .screen[data-screen="website"] .web-url .lock {
+      .web-url .lock {
         width: 12px;
         height: 12px;
         flex-shrink: 0;
         color: var(--gray-400);
       }
-      .screen[data-screen="website"] .web-url span {
+      .web-url span {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-      .screen[data-screen="website"] .safari-tabs {
-        width: 34px;
-        height: 34px;
-        border: 0;
-        background: transparent;
-        color: #007aff;
-        display: grid;
-        place-items: center;
-        cursor: pointer;
-        padding: 0;
-      }
-      .screen[data-screen="website"] .safari-tabs svg {
-        width: 20px;
-        height: 20px;
-      }
-      .screen[data-screen="website"] .web-frame {
-        flex: 1;
-        min-height: 0;
-        border: 0;
-        width: 100%;
-        background: #fff;
-      }
-      .screen[data-screen="website"] .safari-toolbar {
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        padding: 8px 12px calc(8px + var(--home-indicator-h));
-        background: #f2f2f7;
-        border-top: 1px solid rgba(0, 0, 0, 0.08);
-      }
-      .screen[data-screen="website"] .safari-toolbar button {
-        border: 0;
-        background: transparent;
-        color: #007aff;
-        width: 44px;
-        height: 36px;
-        display: grid;
-        place-items: center;
-        cursor: pointer;
-        padding: 0;
-      }
-      .screen[data-screen="website"] .safari-toolbar button:disabled {
-        color: rgba(0, 122, 255, 0.28);
-      }
-      .screen[data-screen="website"] .safari-toolbar svg {
-        width: 22px;
-        height: 22px;
       }
 
       .splash-inner {
@@ -4099,50 +4128,35 @@
           </div>
         </div>
 
-        <!-- 0. EVODENTAL WEBSITE (mobile Safari) -->
-        <section class="screen active" data-screen="website">
-          <div class="web-chrome">
-            <div class="web-chrome-row">
-              <div class="safari-nav">
-                <button type="button" class="safari-btn" id="safariBack" aria-label="Back" disabled>
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <button type="button" class="safari-btn" id="safariForward" aria-label="Forward" disabled>
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-              </div>
-              <div class="web-url">
-                <svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.75"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
-                <span id="safariUrlLabel">evodental.com</span>
-              </div>
-              <button type="button" class="safari-tabs" aria-label="Tabs" data-toast="Tabs (demo)">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5" stroke="currentColor" stroke-width="1.75"/><path d="M9 9h6v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+        <!-- Persistent Safari chrome -->
+        <div id="safariShellTop">
+          <div class="web-chrome-row">
+            <div class="safari-nav">
+              <button type="button" class="safari-btn" id="safariBack" aria-label="Back" disabled>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button type="button" class="safari-btn" id="safariForward" aria-label="Forward" disabled>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
             </div>
+            <div class="web-url">
+              <svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.75"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+              <span id="safariUrlLabel">evodental.com</span>
+            </div>
+            <button type="button" class="safari-tabs" aria-label="Tabs" data-toast="Tabs (demo)">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5" stroke="currentColor" stroke-width="1.75"/><path d="M9 9h6v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+            </button>
           </div>
+        </div>
+
+        <!-- 0. EVODENTAL WEBSITE (mobile Safari) -->
+        <section class="screen active" data-screen="website">
           <iframe
             class="web-frame"
             id="evoWebsiteFrame"
             title="EvoDental website"
             src="./website/index.html"
           ></iframe>
-          <div class="safari-toolbar">
-            <button type="button" id="safariToolbarBack" aria-label="Back" disabled>
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button type="button" id="safariToolbarForward" aria-label="Forward" disabled>
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button type="button" aria-label="Share" data-toast="Share (demo)">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 14V4M12 4l-3.5 3.5M12 4l3.5 3.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
-            </button>
-            <button type="button" aria-label="Bookmarks" data-toast="Bookmarks (demo)">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.5L6 20V5a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
-            </button>
-            <button type="button" aria-label="Tabs" data-toast="Tabs (demo)">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5" stroke="currentColor" stroke-width="1.75"/></svg>
-            </button>
-          </div>
         </section>
 
         <!-- 1. iOS HOME -->
@@ -4305,8 +4319,8 @@
           </div>
           <footer class="ion-footer">
             <div class="ion-toolbar">
-              <button type="button" class="ion-button secondary-navy" id="createAccountBtn">Create an account</button>
-              <button type="button" class="ion-button primary" id="openLoginModal">Login</button>
+              <button type="button" class="ion-button primary" id="createAccountBtn">Create an account</button>
+              <button type="button" class="ion-button primary-light" id="openLoginModal">Login</button>
             </div>
           </footer>
         </section>
@@ -4315,7 +4329,7 @@
         <section class="screen" data-screen="login">
           <header class="ion-header">
             <div class="ion-toolbar">
-              <button type="button" class="back" data-go="website">Back</button>
+              <button type="button" class="back" id="loginBackBtn">Back</button>
               <div class="ion-title">Login</div>
               <span></span>
             </div>
@@ -4353,7 +4367,7 @@
         <section class="screen" data-screen="signup">
           <header class="ion-header">
             <div class="ion-toolbar">
-              <button type="button" class="back" data-go="onboarding">Back</button>
+              <button type="button" class="back" id="signupBackBtn">Back</button>
               <div class="ion-title">Create Account</div>
               <span></span>
             </div>
@@ -5068,6 +5082,23 @@
           </div>
         </button>
         <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        <div id="safariShellBottom">
+          <button type="button" id="safariToolbarBack" aria-label="Back" disabled>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" id="safariToolbarForward" aria-label="Forward" disabled>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" aria-label="Share" data-toast="Share (demo)">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 14V4M12 4l-3.5 3.5M12 4l3.5 3.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+          </button>
+          <button type="button" aria-label="Bookmarks" data-toast="Bookmarks (demo)">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.5L6 20V5a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" aria-label="Tabs" data-toast="Tabs (demo)">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5" stroke="currentColor" stroke-width="1.75"/></svg>
+          </button>
+        </div>
         <div class="home-indicator light" id="homeIndicator" aria-hidden="true"></div>
       </div>
     </div>
@@ -5081,6 +5112,142 @@
       const homeIndicator = document.getElementById("homeIndicator");
       const tabScreens = new Set(["home", "program", "goals", "settings", "res-section", "res-detail", "res-saved"]);
       const lightStatusScreens = new Set(["ios-home"]);
+      const safariScreens = new Set([
+        "website",
+        "splash",
+        "onboarding",
+        "login",
+        "signup",
+        "verification",
+        "welcome-letter",
+        "terms",
+        "disclaimer",
+      ]);
+      const safariUrlByScreen = {
+        splash: "app.weguide.com.au",
+        onboarding: "app.weguide.com.au",
+        login: "app.weguide.com.au/login",
+        signup: "app.weguide.com.au/signup",
+        verification: "app.weguide.com.au/verify",
+        "welcome-letter": "app.weguide.com.au/welcome",
+        terms: "app.weguide.com.au/terms",
+        disclaimer: "app.weguide.com.au/disclaimer",
+      };
+      let safariStack = [];
+      let safariIndex = -1;
+      let safariSilent = false;
+      const websiteFrame = document.getElementById("evoWebsiteFrame");
+      const webUrlLabel = document.getElementById("safariUrlLabel");
+      const safariBack = document.getElementById("safariBack");
+      const safariForward = document.getElementById("safariForward");
+      const safariToolbarBack = document.getElementById("safariToolbarBack");
+      const safariToolbarForward = document.getElementById("safariToolbarForward");
+
+      function webEntryFromPath(pathname, srcFallback) {
+        const p = String(pathname || srcFallback || "").toLowerCase();
+        if (p.includes("app.html")) {
+          return { kind: "web", url: "./website/app.html", label: "app.weguide.com.au" };
+        }
+        if (p.includes("contact")) {
+          return { kind: "web", url: "./website/contact.html", label: "evodental.com/contact" };
+        }
+        return { kind: "web", url: "./website/index.html", label: "evodental.com" };
+      }
+
+      function currentWebEntry() {
+        try {
+          return webEntryFromPath(websiteFrame && websiteFrame.contentWindow.location.pathname, websiteFrame && websiteFrame.src);
+        } catch (_) {
+          return webEntryFromPath("", websiteFrame && websiteFrame.src);
+        }
+      }
+
+      function entryForScreen(screen) {
+        if (screen === "website") return currentWebEntry();
+        return {
+          kind: "app",
+          screen,
+          label: safariUrlByScreen[screen] || "app.weguide.com.au",
+        };
+      }
+
+      function entriesEqual(a, b) {
+        if (!a || !b || a.kind !== b.kind) return false;
+        if (a.kind === "web") return a.url === b.url;
+        return a.screen === b.screen;
+      }
+
+      function updateSafariChromeUI() {
+        const cur = safariStack[safariIndex];
+        if (webUrlLabel && cur) webUrlLabel.textContent = cur.label;
+        const canBack = safariIndex > 0;
+        const canForward = safariIndex >= 0 && safariIndex < safariStack.length - 1;
+        [safariBack, safariToolbarBack].forEach((btn) => {
+          if (btn) btn.disabled = !canBack;
+        });
+        [safariForward, safariToolbarForward].forEach((btn) => {
+          if (btn) btn.disabled = !canForward;
+        });
+      }
+
+      function pushSafariEntry(entry) {
+        if (safariSilent || !entry) return;
+        const cur = safariStack[safariIndex];
+        if (entriesEqual(cur, entry)) {
+          updateSafariChromeUI();
+          return;
+        }
+        safariStack = safariStack.slice(0, safariIndex + 1);
+        safariStack.push(entry);
+        safariIndex = safariStack.length - 1;
+        updateSafariChromeUI();
+      }
+
+      function applySafariEntry(entry) {
+        if (!entry) return;
+        safariSilent = true;
+        if (entry.kind === "web") {
+          go("website");
+          if (websiteFrame) {
+            const wantName = entry.url.split("/").pop();
+            let needsLoad = true;
+            try {
+              const curPath = websiteFrame.contentWindow.location.pathname || "";
+              needsLoad = !curPath.endsWith(wantName);
+            } catch (_) {
+              needsLoad = true;
+            }
+            if (needsLoad) websiteFrame.src = entry.url;
+          }
+        } else {
+          go(entry.screen);
+        }
+        safariSilent = false;
+        updateSafariChromeUI();
+      }
+
+      function safariGoBack() {
+        if (safariIndex <= 0) return;
+        safariIndex -= 1;
+        applySafariEntry(safariStack[safariIndex]);
+      }
+
+      function safariGoForward() {
+        if (safariIndex >= safariStack.length - 1) return;
+        safariIndex += 1;
+        applySafariEntry(safariStack[safariIndex]);
+      }
+
+      function openSafariApp() {
+        if (websiteFrame) {
+          const entry = { kind: "web", url: "./website/app.html", label: "app.weguide.com.au" };
+          safariSilent = true;
+          go("website");
+          websiteFrame.src = entry.url;
+          safariSilent = false;
+          pushSafariEntry(entry);
+        }
+      }
       let toastTimer;
       let splashTimer;
       let verifyTimer;
@@ -5168,10 +5335,17 @@
           el.classList.toggle("active", el.dataset.go === screen);
         });
         device.classList.toggle("has-tabs", tabScreens.has(screen));
+        device.classList.toggle("has-safari", safariScreens.has(screen));
 
         const light = lightStatusScreens.has(screen);
         statusBar.classList.toggle("light", light);
         homeIndicator.classList.toggle("light", light);
+
+        if (safariScreens.has(screen) && !safariSilent) {
+          pushSafariEntry(entryForScreen(screen));
+        } else {
+          updateSafariChromeUI();
+        }
 
         if (screen === "splash") {
           splashTimer = setTimeout(() => go("onboarding"), 1600);
@@ -8031,70 +8205,35 @@
         }
       });
 
-      const websiteFrame = document.getElementById("evoWebsiteFrame");
-      const webUrlLabel = document.getElementById("safariUrlLabel");
-      const safariBack = document.getElementById("safariBack");
-      const safariForward = document.getElementById("safariForward");
-      const safariToolbarBack = document.getElementById("safariToolbarBack");
-      const safariToolbarForward = document.getElementById("safariToolbarForward");
-
-      function safariHistoryState() {
-        try {
-          const win = websiteFrame && websiteFrame.contentWindow;
-          if (!win) return { canBack: false, canForward: false };
-          // history.length is not directional; use path heuristics + length
-          const path = win.location.pathname || "";
-          const canBack = /\/(contact|app)\.html$/i.test(path) || win.history.length > 1;
-          return { canBack, canForward: false };
-        } catch (_) {
-          return { canBack: false, canForward: false };
-        }
-      }
-
-      function updateSafariChrome() {
-        try {
-          const path = (websiteFrame.contentWindow.location.pathname || "").toLowerCase();
-          if (path.includes("app.html")) webUrlLabel.textContent = "app.weguide.com.au";
-          else if (path.includes("contact")) webUrlLabel.textContent = "evodental.com/contact";
-          else webUrlLabel.textContent = "evodental.com";
-        } catch (_) {
-          /* ignore */
-        }
-        const st = safariHistoryState();
-        [safariBack, safariToolbarBack].forEach((btn) => {
-          if (btn) btn.disabled = !st.canBack;
-        });
-        [safariForward, safariToolbarForward].forEach((btn) => {
-          if (btn) btn.disabled = !st.canForward;
-        });
-      }
-
-      function safariGoBack() {
-        try {
-          const win = websiteFrame.contentWindow;
-          const path = (win.location.pathname || "").toLowerCase();
-          if (/\/(contact|app)\.html$/i.test(path)) {
-            win.location.href = "./website/index.html";
-            return;
-          }
-          win.history.back();
-        } catch (_) {
-          websiteFrame.src = "./website/index.html";
-        }
-      }
-
-      function openSafariApp() {
-        go("website");
-        if (websiteFrame) websiteFrame.src = "./website/app.html";
-        if (webUrlLabel) webUrlLabel.textContent = "app.weguide.com.au";
-        setTimeout(updateSafariChrome, 50);
+      function safariGoBackOr(fallbackScreen) {
+        if (safariIndex > 0) safariGoBack();
+        else if (fallbackScreen) go(fallbackScreen);
       }
 
       if (safariBack) safariBack.addEventListener("click", safariGoBack);
       if (safariToolbarBack) safariToolbarBack.addEventListener("click", safariGoBack);
+      if (safariForward) safariForward.addEventListener("click", safariGoForward);
+      if (safariToolbarForward) safariToolbarForward.addEventListener("click", safariGoForward);
+
+      const loginBackBtn = document.getElementById("loginBackBtn");
+      if (loginBackBtn) {
+        loginBackBtn.addEventListener("click", () => safariGoBackOr("website"));
+      }
+      const signupBackBtn = document.getElementById("signupBackBtn");
+      if (signupBackBtn) {
+        signupBackBtn.addEventListener("click", () => safariGoBackOr("onboarding"));
+      }
 
       if (websiteFrame) {
-        websiteFrame.addEventListener("load", updateSafariChrome);
+        websiteFrame.addEventListener("load", () => {
+          const active = document.querySelector(".screen.active");
+          if (!active || active.dataset.screen !== "website") {
+            updateSafariChromeUI();
+            return;
+          }
+          if (!safariSilent) pushSafariEntry(currentWebEntry());
+          else updateSafariChromeUI();
+        });
       }
     </script>
   </body>
