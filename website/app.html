@@ -28,7 +28,12 @@
       flex-direction: column;
     }
     .top {
-      padding: 20px 20px 8px;
+      position: relative;
+      padding: 16px 20px 4px;
+    }
+    .welcome {
+      position: relative;
+      padding: 0 56px;
     }
     .welcome h1 {
       font-family: var(--display);
@@ -36,54 +41,85 @@
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1.2;
-      margin-bottom: 4px;
+      margin: 0;
+      text-align: center;
     }
     .welcome .wave { font-style: normal; }
     .lang {
-      margin-top: 10px;
+      position: absolute;
+      top: 16px;
+      right: 20px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      border: 1px solid var(--gray-200);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      gap: 4px;
+      margin: 0;
+      flex-shrink: 0;
+      border: 0;
+      padding: 6px 2px;
+      font-size: 0.8125rem;
+      font-weight: 500;
       color: var(--navy);
-      background: var(--white);
+      background: transparent;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .lang svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.7;
+    }
+    .lang .chev {
+      width: 12px;
+      height: 12px;
     }
     .slides {
       flex: 1;
       padding: 8px 20px 20px;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      text-align: center;
       min-height: 0;
     }
-    .slide { display: none; }
-    .slide.active { display: block; animation: in 0.25s ease; }
+    .slide { display: none; width: 100%; }
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: in 0.25s ease;
+    }
     @keyframes in {
       from { opacity: 0; transform: translateX(12px); }
       to { opacity: 1; transform: none; }
     }
     .slide img {
       width: 100%;
+      max-width: 340px;
       height: 220px;
       object-fit: cover;
       border-radius: 16px;
       background: var(--gray-100);
-      margin-bottom: 16px;
+      margin: 12px auto 16px;
     }
     .slide h2 {
       font-family: var(--display);
       font-size: 1.2rem;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin: 0 auto 8px;
       letter-spacing: -0.015em;
+      text-align: center;
+      max-width: 320px;
     }
     .slide p {
       font-size: 0.92rem;
       color: var(--muted);
       line-height: 1.5;
+      text-align: center;
+      margin: 0 auto;
+      max-width: 320px;
     }
     .dots {
       display: flex;
@@ -134,7 +170,11 @@
   <div class="top">
     <div class="welcome">
       <h1>Welcome to<br />EvoDental <span class="wave" aria-hidden="true">👋</span></h1>
-      <span class="lang">EN ▾</span>
+      <button type="button" class="lang" aria-label="Language">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></svg>
+        EN
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+      </button>
     </div>
   </div>
 

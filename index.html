@@ -787,10 +787,13 @@
 
       /* ——— Onboarding ——— */
       .welcome-row {
+        position: relative;
         display: flex;
         align-items: flex-start;
-        justify-content: space-between;
+        justify-content: center;
         gap: 8px;
+        padding-right: 64px;
+        padding-left: 64px;
       }
 
       .welcome-header {
@@ -798,11 +801,13 @@
         margin: 0;
         flex: 1;
         font-size: 28px;
+        text-align: center;
       }
 
       .screen[data-screen="onboarding"] .welcome-header {
         font-size: 26px;
         margin: 0;
+        text-align: center;
       }
 
       .welcome-header .line {
@@ -814,6 +819,9 @@
       }
 
       .lang-chip {
+        position: absolute;
+        top: 0;
+        right: 0;
         display: inline-flex;
         align-items: center;
         gap: 4px;
@@ -903,19 +911,21 @@
       }
 
       .swiper-slide h2 {
-        margin: 0 0 0.55rem;
+        margin: 0 auto 0.55rem;
         max-width: 320px;
         font-size: 1.25rem;
         flex-shrink: 0;
+        text-align: center;
       }
 
       .swiper-slide p {
-        margin: 0;
+        margin: 0 auto;
         max-width: 320px;
         font-size: 0.9375rem;
         line-height: 1.45;
         color: var(--muted);
         flex-shrink: 0;
+        text-align: center;
       }
 
       .swiper-pagination {
