@@ -583,32 +583,90 @@
     <p class="foot-note">Clinics across the UK · Mon–Fri support</p>
   </main>
 
-  <div class="modal-overlay" id="callbackModal" role="dialog" aria-modal="true" aria-labelledby="callbackTitle">
+  <div class="modal-overlay" id="callbackModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
-      <h2 id="callbackTitle">Request a callback</h2>
-      <p>On the live site this opens the callback form. For this prototype we’ll note your request.</p>
-      <div class="modal-actions">
-        <button type="button" class="secondary" id="modalClose">Cancel</button>
-        <button type="button" class="primary" id="modalConfirm">Confirm</button>
-      </div>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      <h3 id="modalTitle">Request a callback</h3>
+      <p class="modal-intro">Complete the form below and one of our team will be in touch within the next 24 hours</p>
+      <form id="callbackForm">
+        <div class="modal-form-grid">
+          <div class="field">
+            <label for="cbFirstName">First name*</label>
+            <input id="cbFirstName" type="text" required placeholder="Jane" />
+          </div>
+          <div class="field">
+            <label for="cbSurname">Surname*</label>
+            <input id="cbSurname" type="text" required placeholder="Smith" />
+          </div>
+          <div class="field">
+            <label for="cbEmail">Email Address*</label>
+            <input id="cbEmail" type="email" required placeholder="jane@example.co.uk" />
+          </div>
+          <div class="field">
+            <label for="cbPhone">Mobile number*</label>
+            <input id="cbPhone" type="tel" required placeholder="0800 470 3052" />
+          </div>
+          <div class="field">
+            <label for="cbClinic">Preferred clinic*</label>
+            <select id="cbClinic" required>
+              <option value="">Please Select</option>
+              <option>Bristol</option>
+              <option>Dartford</option>
+              <option>Edinburgh</option>
+              <option>Glasgow</option>
+              <option>Liverpool</option>
+              <option>London</option>
+              <option>Manchester</option>
+            </select>
+          </div>
+          <div class="field">
+            <p class="modal-consent">I would like to receive communications from the practice about services, offers, events and other information that may be relevant to me. I understand I can withdraw my consent at any time.*</p>
+            <div class="modal-radio-group">
+              <label><input type="radio" name="comms" value="yes" /> Yes</label>
+              <label><input type="radio" name="comms" value="no" /> No</label>
+            </div>
+          </div>
+          <div class="modal-app-promo">
+            <p>If you'd like your EvoDental digital companion, register on our app now and start your journey today.</p>
+            <a class="modal-app-btn" href="#register" data-prototype-register>Register now</a>
+          </div>
+          <div class="field field-full">
+            <label class="modal-checkbox-row">
+              <input type="checkbox" id="cbNhs" required />
+              <span>I understand this treatment is not NHS-funded and no free clinical trials or grants are available*</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="modal-submit">Request consultation</button>
+      </form>
     </div>
   </div>
 
   <script>
     (function () {
       var modal = document.getElementById("callbackModal");
-      document.getElementById("callbackBtn").addEventListener("click", function () {
+      var btn = document.getElementById("callbackBtn");
+      var close = document.getElementById("modalClose");
+      var form = document.getElementById("callbackForm");
+
+      btn.addEventListener("click", function () {
         modal.classList.add("open");
       });
-      document.getElementById("modalClose").addEventListener("click", function () {
+
+      close.addEventListener("click", function () {
         modal.classList.remove("open");
       });
-      document.getElementById("modalConfirm").addEventListener("click", function () {
-        modal.classList.remove("open");
-        alert("Thank you — the team would call you back on the live site.");
-      });
+
       modal.addEventListener("click", function (e) {
         if (e.target === modal) modal.classList.remove("open");
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        modal.classList.remove("open");
+        alert("Thank you — in the live site, your callback request would be sent to the EvoDental team.");
+        form.reset();
       });
 
       function openPrototypeRegister(e) {
