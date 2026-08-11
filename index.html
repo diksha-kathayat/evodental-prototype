@@ -611,6 +611,46 @@
         cursor: pointer;
       }
 
+      .screen[data-screen="website"] {
+        background: #fff;
+        padding-top: var(--status-h);
+      }
+      .screen[data-screen="website"] .web-chrome {
+        flex-shrink: 0;
+        background: #f2f2f7;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 8px 12px 10px;
+      }
+      .screen[data-screen="website"] .web-url {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 8px 12px;
+        font-size: 0.78rem;
+        color: var(--muted);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .screen[data-screen="website"] .web-url .lock {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        color: var(--gray-400);
+      }
+      .screen[data-screen="website"] .web-url span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .screen[data-screen="website"] .web-frame {
+        flex: 1;
+        min-height: 0;
+        border: 0;
+        width: 100%;
+        background: #fff;
+      }
+
       .splash-inner {
         flex: 1;
         display: flex;
@@ -3956,7 +3996,7 @@
     </style>
   </head>
   <body>
-    <p class="caption">EvoDental · WeGuide prototype — Account flow → Home → Enquiry→FCA program<br /><span style="opacity:.75">Reference: weguide-medical-frontend/prototypes/evodental + competitor-analysis MVP</span></p>
+    <p class="caption">EvoDental · WeGuide prototype — Website → Register → Login → Home<br /><span style="opacity:.75">Tap Register now on the site to open the app login inside this phone</span></p>
 
     <div class="phone" id="phone">
       <div class="phone-screen" id="device">
@@ -3985,8 +4025,24 @@
           </div>
         </div>
 
+        <!-- 0. EVODENTAL WEBSITE (mobile Safari) -->
+        <section class="screen active" data-screen="website">
+          <div class="web-chrome" aria-hidden="true">
+            <div class="web-url">
+              <svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.75"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+              <span>evodental.com</span>
+            </div>
+          </div>
+          <iframe
+            class="web-frame"
+            id="evoWebsiteFrame"
+            title="EvoDental website"
+            src="./website/index.html"
+          ></iframe>
+        </section>
+
         <!-- 1. iOS HOME -->
-        <section class="screen active" data-screen="ios-home">
+        <section class="screen" data-screen="ios-home">
           <div class="ios-wallpaper" aria-hidden="true"></div>
           <div class="ios-home-content">
             <div class="ios-app-grid">
@@ -4155,7 +4211,7 @@
         <section class="screen" data-screen="login">
           <header class="ion-header">
             <div class="ion-toolbar">
-              <button type="button" class="back" data-go="onboarding">Back</button>
+              <button type="button" class="back" data-go="website">Back</button>
               <div class="ion-title">Login</div>
               <span></span>
             </div>
@@ -5250,7 +5306,7 @@
       });
 
       document.getElementById("logoutBtn").addEventListener("click", () => {
-        go("ios-home");
+        go("website");
       });
 
       document.getElementById("settingsContact")?.addEventListener("click", () => {
@@ -7833,9 +7889,10 @@
       loadMagicLinkData().catch(() => {});
 
       // Deep-link support for EvoDental website CTA / demo hubs
-      // ?start=onboarding | splash | signup | welcome-letter | home | program | ios-home
+      // ?start=website | login | onboarding | splash | home | program | ios-home
       const startParam = new URLSearchParams(window.location.search).get("start");
       const allowedStarts = new Set([
+        "website",
         "ios-home",
         "splash",
         "onboarding",
@@ -7853,7 +7910,12 @@
         "res-section",
         "res-detail",
       ]);
-      go(allowedStarts.has(startParam) ? startParam : "ios-home");
+      go(allowedStarts.has(startParam) ? startParam : "website");
+
+      window.addEventListener("message", (event) => {
+        if (!event.data || event.data.type !== "evo-register") return;
+        go("login");
+      });
     </script>
   </body>
 </html>
