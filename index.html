@@ -3996,7 +3996,7 @@
     </style>
   </head>
   <body>
-    <p class="caption">EvoDental · WeGuide prototype — Website → Register → Login → Home<br /><span style="opacity:.75">Tap Register now on the site to open the app login inside this phone</span></p>
+    <p class="caption">EvoDental · WeGuide prototype — Website → Contact / Register → App landing → Login<br /><span style="opacity:.75">Contact us opens the app-focused contact page · Register now opens splash + landing screens</span></p>
 
     <div class="phone" id="phone">
       <div class="phone-screen" id="device">
@@ -7914,8 +7914,23 @@
 
       window.addEventListener("message", (event) => {
         if (!event.data || event.data.type !== "evo-register") return;
-        go("login");
+        go("splash");
       });
+
+      const websiteFrame = document.getElementById("evoWebsiteFrame");
+      const webUrlLabel = document.querySelector('.screen[data-screen="website"] .web-url span');
+      if (websiteFrame && webUrlLabel) {
+        websiteFrame.addEventListener("load", () => {
+          try {
+            const path = websiteFrame.contentWindow.location.pathname || "";
+            webUrlLabel.textContent = path.includes("contact")
+              ? "evodental.com/contact"
+              : "evodental.com";
+          } catch (_) {
+            /* ignore cross-origin */
+          }
+        });
+      }
     </script>
   </body>
 </html>
