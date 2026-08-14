@@ -2994,6 +2994,12 @@
         font-weight: 500;
         color: var(--navy);
       }
+      .viz-check-grid button.row {
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+        cursor: pointer;
+      }
       .viz-check-grid .mark {
         width: 22px;
         height: 22px;
@@ -4659,7 +4665,7 @@
           <header class="ion-header with-border">
             <div class="ion-toolbar">
               <span></span>
-              <div class="ion-title">Resources</div>
+              <div class="ion-title">Education</div>
               <span></span>
             </div>
           </header>
@@ -4667,7 +4673,7 @@
             <main class="info-main" id="resourcesMain">
               <div class="search-bar">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-                <input type="search" id="resSearch" placeholder="Search" aria-label="Search resources" />
+                <input type="search" id="resSearch" placeholder="Search" aria-label="Search education" />
               </div>
 
               <section class="program-info-html" id="resWelcome">
@@ -4688,7 +4694,7 @@
                 <img src="https://wg-internal.s3.amazonaws.com/evodental/About-Us-Rebrand-1.jpg" alt="EvoDental team" />
               </section>
 
-              <div class="res-card-list" id="resSectionList" aria-label="Resource sections"></div>
+              <div class="res-card-list" id="resSectionList" aria-label="Education sections"></div>
             </main>
           </div>
         </section>
@@ -4988,7 +4994,7 @@
               <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
               <path d="M3 11h18" />
             </svg>
-            Resources
+            Education
           </button>
           <button type="button" class="ion-tab-button" data-go="goals">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -5724,37 +5730,28 @@
       let consultationRequested = false;
       let consultationCallThanks = false;
       let pendingPush = null;
+      let bookingReminderScheduled = false;
 
       const TASK_META = {
-        journey: "Your Evodental Journey",
+        journey: "My EvoDental journey",
         preAssessment: "Pre-assessment form",
-        worry: "What worries you most?",
-        explore: "Your treatment pathway",
-        prepAssessment: "Preparing for your assessment call",
-        afterAssessment: "After your assessment call",
-        anxietyScale: "Dental anxiety assessment",
-        ohip: "How teeth affect daily life",
-        fcaBooked: "Your FCA is booked",
-        bringList: "What to bring to your visit",
-        decisionReadiness: "Decision readiness",
+        educationGuide: "Explore the Education hub",
+        waitingCheckIn: "While you wait for your call",
+        prepAssessment: "Preparing for your pre-assessment call",
+        bookConsultation: "Book your consultation",
         prepConsultation: "Preparing for your consultation",
-        afterConsultation: "After your consultation",
+        consultationDay: "What to expect on your consultation day",
       };
 
       const ASSESSMENT_ORDER = [
         "journey",
         "preAssessment",
-        "explore",
-        "worry",
+        "educationGuide",
+        "waitingCheckIn",
         "prepAssessment",
-        "afterAssessment",
-        "anxietyScale",
-        "ohip",
-        "fcaBooked",
-        "bringList",
-        "decisionReadiness",
+        "bookConsultation",
         "prepConsultation",
-        "afterConsultation",
+        "consultationDay",
       ];
 
       const TOOTH_COUNT_OPTS = [
@@ -5944,43 +5941,132 @@
 
       const FORMS = {
         journey: {
-          title: "Your Evodental Journey",
+          title: "My EvoDental journey",
           steps: [
             rich({
-              title: "Personalise your journey",
+              title: "Your path with EvoDental",
               html: `
                 <div class="viz">
                   <img class="evo-logo" src="https://www.evodental.com/wp-content/uploads/2025/05/evovectorlogo.svg" alt="EvoDental" />
                   <img class="viz-bleed tall journey-hero" src="https://www.evodental.com/wp-content/uploads/2025/06/dawn-side-by-side-600x600.jpg" alt="Patient smile transformation" />
-                  <p class="viz-kicker">Your journey</p>
-                  <p class="viz-line">A few short questions — then we guide you at your pace.</p>
-                  <div class="viz-pills">
-                    <span class="viz-pill">Your situation</span>
-                    <span class="viz-pill">Your comfort</span>
-                    <span class="viz-pill">Your pace</span>
+                  <p class="viz-kicker">Inquiry → consultation</p>
+                  <p class="viz-line">Explore at your pace. We’ll add more structure only when your consultation is booked.</p>
+                  <div class="viz-rail">
+                    <div class="viz-rail-item"><span class="viz-rail-num">1</span><div><strong>Tell us what matters</strong><span>A short personalised pre-assessment</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">2</span><div><strong>Pre-assessment call</strong><span>Our team learns about your situation</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">3</span><div><strong>Book your free consultation</strong><span>Choose the next step when you feel ready</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">4</span><div><strong>Prepare and attend</strong><span>Know what to expect on the day</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">5</span><div><strong>Review your plan</strong><span>Your personalised treatment plan and options</span></div></div>
                   </div>
                   <p class="viz-tag">— be you again —</p>
                 </div>`,
             }),
             rich({
-              title: "How this programme works",
+              title: "Use Education whenever you need it",
               html: `
                 <div class="viz">
-                  <p class="viz-kicker">Four simple steps</p>
-                  <div class="viz-rail">
-                    <div class="viz-rail-item"><span class="viz-rail-num">1</span><div><strong>Tell us about you</strong><span>Short assessments — we listen first</span></div></div>
-                    <div class="viz-rail-item"><span class="viz-rail-num">2</span><div><strong>Learn in Resources</strong><span>Options, anxiety &amp; prep anytime</span></div></div>
-                    <div class="viz-rail-item"><span class="viz-rail-num">3</span><div><strong>Assessment call</strong><span>Request a call · or WhatsApp us</span></div></div>
-                    <div class="viz-rail-item"><span class="viz-rail-num">4</span><div><strong>Free clinical assessment</strong><span>~90 min · plan &amp; costs · no obligation</span></div></div>
+                  <p class="viz-kicker">Your Education hub</p>
+                  <p class="viz-line">Open the Education tab at any time. Search for a question, explore a section, and save useful pages to My Saved Items.</p>
+                  <div class="viz-grid">
+                    <div class="viz-tile"><div class="ico">?</div><strong>Understand</strong><span>Your journey and common questions</span></div>
+                    <div class="viz-tile"><div class="ico">£</div><strong>Compare</strong><span>Treatment options and pricing</span></div>
+                    <div class="viz-tile"><div class="ico">▶</div><strong>Watch</strong><span>Videos and patient stories</span></div>
+                    <div class="viz-tile"><div class="ico">♡</div><strong>Feel supported</strong><span>Anxiety and preparation guidance</span></div>
                   </div>
-                  ${videoBlock("7RUmPAlB4h4", "Your free consultation")}
-                  ${clinicContactHtml({ note: "Prefer to talk now?" })}
+                  <button type="button" class="hc-cta" data-education-home>Open Education</button>
                 </div>`,
             }),
           ],
         },
 
         preAssessment: {
+          title: "Pre-assessment form",
+          steps: [
+            rich({
+              title: "Help us personalise your next steps",
+              html: `
+                <div class="viz">
+                  <p class="viz-kicker">Optional · about 2 minutes</p>
+                  <p class="viz-line"><strong>Every question is optional.</strong> Share only what feels useful and tap Next to skip anything. Your answers help the team prepare for your pre-assessment call and point you to relevant education.</p>
+                  <div class="viz-pills">
+                    <span class="viz-pill">No mandatory questions</span>
+                    <span class="viz-pill">Patient-led</span>
+                    <span class="viz-pill">No obligation</span>
+                  </div>
+                </div>`,
+            }),
+            {
+              type: "single",
+              title: "Which best describes your situation today?",
+              options: [
+                "I wear dentures and want a fixed alternative",
+                "My teeth are failing, loose or painful",
+                "I have several missing teeth",
+                "I’m exploring full-mouth dental implants",
+                "I’m not sure what treatment I need",
+              ],
+              paths: {
+                0: { title: "A fixed alternative may be possible", body: "Your pre-assessment call will explore comfort, stability and whether full-mouth implants could suit you." },
+                1: { title: "We’ll listen first", body: "Tell the team what is affecting you most. They can explain suitable next steps without pressure." },
+                2: { title: "There may be more than one option", body: "The team will help clarify whether full-mouth treatment or another route is most appropriate." },
+                3: { title: "You’re in the right place to explore", body: "Use Education for treatment, pricing and patient stories while the team prepares for your call." },
+                4: { title: "That’s completely fine", body: "You do not need to diagnose yourself. The call is designed to help you understand your options." },
+              },
+            },
+            {
+              type: "multi",
+              title: "What would you most like to improve?",
+              options: [
+                "Eat comfortably",
+                "Smile with confidence",
+                "Move away from dentures",
+                "Reduce pain or repeated dental problems",
+                "Feel less anxious about treatment",
+                "Understand costs and finance",
+              ],
+            },
+            {
+              type: "single",
+              title: "What is your biggest question right now?",
+              options: [
+                "Am I suitable?",
+                "Can I trust EvoDental?",
+                "What happens during treatment?",
+                "How much could it cost?",
+                "What should I do next?",
+              ],
+            },
+            {
+              type: "single",
+              title: "Do you currently smoke?",
+              options: ["Yes", "No", "Prefer not to say"],
+              followUps: {
+                0: [
+                  {
+                    key: "preSmokeFrequency",
+                    type: "single",
+                    title: "How often do you smoke?",
+                    options: ["Every day", "A few times a week", "Occasionally", "I’m cutting down or quitting"],
+                  },
+                ],
+                1: [],
+                2: [],
+              },
+            },
+            {
+              type: "single",
+              title: "How would you like us to contact you for the pre-assessment call?",
+              options: ["Mobile call", "WhatsApp", "Email me first", "No preference"],
+            },
+            {
+              type: "textarea",
+              title: "Anything you’d like the team to know before they call?",
+              placeholder: "Optional — questions, worries, accessibility needs or a good time to call…",
+            },
+          ],
+        },
+
+        legacyPreAssessment: {
           title: "Pre-assessment form",
           steps: [
             rich({
@@ -6156,6 +6242,82 @@
           ],
         },
 
+        educationGuide: {
+          title: "Explore the Education hub",
+          steps: [
+            rich({
+              title: "We’ll keep useful guidance close",
+              html: `
+                <div class="viz">
+                  <p class="viz-kicker">While the team prepares to call</p>
+                  <p class="viz-line">We’ll use app notifications and email to share a few useful pages—not a long course. You can also browse Education in any order.</p>
+                  <div class="viz-grid">
+                    <div class="viz-tile"><div class="ico">↑</div><strong>In-app</strong><span>Timely reading suggestions</span></div>
+                    <div class="viz-tile"><div class="ico">@</div><strong>Email</strong><span>Links you can revisit later</span></div>
+                  </div>
+                  <button type="button" class="hc-cta" data-education-home>Open Education</button>
+                </div>`,
+            }),
+            rich({
+              title: "A few good places to start",
+              html: `
+                <div class="viz">
+                  <p class="viz-kicker">Chosen for this stage</p>
+                  <div class="viz-check-grid">
+                    <button type="button" class="row" data-education-section="journey" data-education-item="expect-consult"><span class="mark">1</span>What to expect at your consultation</button>
+                    <button type="button" class="row" data-education-section="options" data-education-item="includes"><span class="mark">2</span>What every treatment option includes</button>
+                    <button type="button" class="row" data-education-section="stories" data-education-item="success-stories"><span class="mark">3</span>Patient success stories</button>
+                  </div>
+                  <p class="viz-tag">Tap any suggestion to open it in Education</p>
+                </div>`,
+            }),
+          ],
+        },
+
+        waitingCheckIn: {
+          title: "While you wait for your call",
+          steps: [
+            rich({
+              title: "A quick check-in",
+              html: `
+                <div class="viz">
+                  <img class="viz-bleed" src="https://www.evodental.com/wp-content/uploads/2026/07/A7401193-scaled.jpg" alt="EvoDental clinic team" />
+                  <p class="viz-kicker">Your pre-assessment is with the team</p>
+                  <p class="viz-line">While you wait, tell us what would be most helpful. We’ll use your answer to guide the content we share.</p>
+                </div>`,
+            }),
+            {
+              type: "single",
+              title: "What would help you feel more prepared for the call?",
+              options: [
+                "Understanding whether I could be suitable",
+                "Seeing how the treatment works",
+                "Knowing likely costs and what is included",
+                "Reading other patients’ experiences",
+                "Help with dental anxiety",
+              ],
+              paths: {
+                0: { title: "We’ll discuss suitability on the call", body: "You do not need to work this out alone. The team will ask about your dental situation and explain the appropriate next step." },
+                1: { title: "Start with the journey guides", body: "Education includes a clear timeline from consultation through same-day fixed teeth and final fit." },
+                2: { title: "Clear pricing matters", body: "Education compares Evo4, Evo6 and Evo6+ and explains what each option includes. Exact suitability and costs are confirmed after assessment." },
+                3: { title: "Real experiences can help", body: "Patient stories show different starting points, concerns and outcomes." },
+                4: { title: "Feeling nervous is normal", body: "Education includes comfort, sedation and support guidance. You can also raise anxiety privately on your call." },
+              },
+            },
+            rich({
+              title: "Explore a useful guide now",
+              html: `
+                <div class="viz">
+                  <div class="viz-check-grid">
+                    <button type="button" class="row" data-education-section="journey" data-education-item="common-questions"><span class="mark">?</span>Common questions answered</button>
+                    <button type="button" class="row" data-education-section="anxiety" data-education-item="nervous-normal"><span class="mark">♡</span>Feeling nervous is normal</button>
+                    <button type="button" class="row" data-education-section="why" data-education-item="experience"><span class="mark">✓</span>Why patients trust EvoDental</button>
+                  </div>
+                </div>`,
+            }),
+          ],
+        },
+
         worry: {
           title: "What worries you most?",
           steps: [
@@ -6209,7 +6371,7 @@
               title: "Different treatment options",
               html: `
                 <div class="viz">
-                  <p class="viz-kicker">Full detail in Resources</p>
+                  <p class="viz-kicker">Full detail in Education</p>
                   <div class="evo-product">
                     <img src="https://wg-internal.s3.amazonaws.com/evodental/Evo4-PMMA.jpg" alt="Evo4" />
                     <div class="body"><h4>Evo4</h4><p>From £9,500 · clear step from dentures</p></div>
@@ -6253,7 +6415,7 @@
                     <div class="viz-tile"><div class="ico">IV</div><strong>IV</strong><span>Deeper calm · escort home</span></div>
                   </div>
                   ${videoBlock("dN3OZCNpgeA", "Sedation options")}
-                  <p class="viz-tag">More in Resources → Dental anxiety</p>
+                  <p class="viz-tag">More in Education → Dental anxiety</p>
                 </div>`,
             }),
             {
@@ -6291,6 +6453,32 @@
           ],
         },
         prepAssessment: {
+          title: "Preparing for your pre-assessment call",
+          steps: [
+            rich({
+              title: "Your call is the next step",
+              html: `
+                <div class="viz">
+                  <p class="viz-kicker">Short, friendly and focused on you</p>
+                  <p class="viz-line">The team will review your pre-assessment, listen to what you want to change, and explain whether a free consultation could be the right next step.</p>
+                  <div class="viz-check-grid">
+                    <div class="row"><span class="mark">1</span>Your dental situation and goals</div>
+                    <div class="row"><span class="mark">2</span>What could make you suitable</div>
+                    <div class="row"><span class="mark">3</span>Your questions about treatment and cost</div>
+                    <div class="row"><span class="mark">4</span>Whether you want to book a free consultation</div>
+                  </div>
+                  ${clinicContactHtml({ note: "Need to reach us before the call?" })}
+                </div>`,
+            }),
+            {
+              type: "textarea",
+              title: "What is the one question you most want answered on the call?",
+              placeholder: "Optional — we’ll make sure the team sees it…",
+            },
+          ],
+        },
+
+        legacyPrepAssessment: {
           title: "Preparing for your assessment call",
           steps: [
             rich({
@@ -6480,7 +6668,50 @@
             },
           ],
         },
-        afterAssessment: {
+        bookConsultation: {
+          title: "Book your consultation",
+          steps: [
+            rich({
+              title: "Your free consultation",
+              html: `
+                <div class="viz">
+                  <img class="viz-bleed" src="https://www.evodental.com/wp-content/uploads/2026/07/A7401193-scaled.jpg" alt="EvoDental clinic" />
+                  <p class="viz-kicker">Your pre-assessment call is complete</p>
+                  <p class="viz-line">When you feel ready, book your free consultation. It is usually around 90 minutes and gives you clear clinical findings, treatment options and costs—with no obligation.</p>
+                  <div class="viz-grid">
+                    <div class="viz-tile"><div class="ico">90</div><strong>About 90 minutes</strong><span>Time to ask questions</span></div>
+                    <div class="viz-tile"><div class="ico">✓</div><strong>No obligation</strong><span>Decide in your own time</span></div>
+                  </div>
+                  ${videoBlock("7RUmPAlB4h4", "Your free consultation")}
+                </div>`,
+            }),
+            rich({
+              title: "Still deciding? These may help",
+              html: `
+                <div class="viz">
+                  <p class="viz-kicker">Useful before you book</p>
+                  <div class="viz-check-grid">
+                    <button type="button" class="row" data-education-section="journey" data-education-item="expect-consult"><span class="mark">1</span>What happens at the consultation?</button>
+                    <button type="button" class="row" data-education-section="stories" data-education-item="success-stories"><span class="mark">2</span>See patient success stories</button>
+                    <button type="button" class="row" data-education-section="options" data-education-item="includes"><span class="mark">3</span>What is included in treatment?</button>
+                    <button type="button" class="row" data-education-section="anxiety" data-education-item="support-people"><span class="mark">4</span>Get support if you feel anxious</button>
+                  </div>
+                  <p class="viz-tag">We’ll send a gentle reminder every other day while booking remains open.</p>
+                </div>`,
+            }),
+            {
+              type: "requestCall",
+              callType: "consultation",
+              title: "Book your consultation",
+              actionLabel: "Book your consultation",
+              intro: "Ready for the next step? Ask the team to arrange your free consultation.",
+              successTitle: "Your consultation booking request is with the team.",
+              successBody: "The team will contact you to confirm the clinic, date and time. Your preparation guidance will now open in the app.",
+            },
+          ],
+        },
+
+        legacyAfterAssessment: {
           title: "After your assessment call",
           steps: [
             rich({
@@ -6652,6 +6883,52 @@
             },
           ],
         },
+        consultationDay: {
+          title: "What to expect on your consultation day",
+          steps: [
+            rich({
+              title: "Your consultation, step by step",
+              html: `
+                <div class="viz">
+                  <p class="viz-kicker">Free clinical assessment · about 90 minutes</p>
+                  <div class="viz-rail">
+                    <div class="viz-rail-item"><span class="viz-rail-num">1</span><div><strong>Welcome and conversation</strong><span>Talk through your goals, health and concerns</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">2</span><div><strong>Clinical assessment</strong><span>Detailed examination and appropriate scans</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">3</span><div><strong>Your options</strong><span>What may suit you, including benefits and risks</span></div></div>
+                    <div class="viz-rail-item"><span class="viz-rail-num">4</span><div><strong>Plan and costs</strong><span>Clear next steps with no pressure to decide</span></div></div>
+                  </div>
+                  ${videoBlock("uhLKzGmM0lE", "What a visit feels like")}
+                </div>`,
+            }),
+            rich({
+              title: "Arrive prepared",
+              html: `
+                <div class="viz">
+                  <div class="viz-check-grid">
+                    <div class="row"><span class="mark">1</span>Photo ID</div>
+                    <div class="row"><span class="mark">2</span>A current medication list</div>
+                    <div class="row"><span class="mark">3</span>Dentures or dental appliances</div>
+                    <div class="row"><span class="mark">4</span>Your questions—and someone you trust, if helpful</div>
+                  </div>
+                  <p class="viz-line">After your consultation, your personalised treatment plan can be uploaded to My Care for you to review.</p>
+                  ${clinicContactHtml({ note: "Questions before the day?" })}
+                </div>`,
+            }),
+            {
+              type: "multi",
+              title: "What would you like to remember for the day?",
+              options: [
+                "Bring my medication list",
+                "Bring my dentures or appliances",
+                "Write down my questions",
+                "Ask someone to come with me",
+                "Ask about finance",
+                "Ask about anxiety and sedation",
+              ],
+            },
+          ],
+        },
+
         fcaBooked: {
           title: "Your FCA is booked",
           steps: [
@@ -6754,17 +7031,18 @@
           title: "Preparing for your consultation",
           steps: [
             rich({
-              title: "Before your consultation call",
+              title: "Get ready for your consultation",
               html: `
                 <div class="viz">
                   <p class="viz-kicker">Consultation prep</p>
-                  <p class="viz-line">Revisit options, costs, timing and worries — before or after your FCA.</p>
+                  <p class="viz-line">Your booking is underway. Use this short checklist to make the consultation useful and comfortable for you.</p>
                   <div class="viz-pills">
-                    <span class="viz-pill">Options</span>
-                    <span class="viz-pill">Finance</span>
-                    <span class="viz-pill">Sedation</span>
-                    <span class="viz-pill">Timing</span>
+                    <span class="viz-pill">Your goals</span>
+                    <span class="viz-pill">Health details</span>
+                    <span class="viz-pill">Questions</span>
+                    <span class="viz-pill">Support person</span>
                   </div>
+                  <button type="button" class="hc-cta" data-education-section="journey" data-education-item="expect-consult">Read: what to expect</button>
                   ${clinicContactHtml({ note: "Reach us directly" })}
                 </div>`,
             }),
@@ -6774,7 +7052,7 @@
               options: [
                 "Treatment options and suitability",
                 "Pricing and finance",
-                "Surgery day and recovery",
+                "How treatment and recovery work",
                 "Anxiety and sedation",
                 "Timing and clinic location",
                 "Something else",
@@ -6782,7 +7060,7 @@
             },
             {
               type: "textarea",
-              title: "Anything you’d like noted before the consultation?",
+              title: "What questions would you like to take to your consultation?",
               placeholder: "Optional…",
             },
           ],
@@ -6836,14 +7114,64 @@
 
       const MILESTONES = [
         { id: "enquiry", title: "Enquiry", text: "You’re exploring whether EvoDental is right for you." },
-        { id: "preAssessment", title: "Pre-assessment", text: "Share baseline details and dental history so the team can prepare." },
-        { id: "triage", title: "Assessment call", text: "Speak with the team about your situation and next steps." },
-        { id: "fca", title: "Free clinical assessment", text: "A free, no-obligation visit — about 90 minutes." },
-        { id: "decision", title: "Decide together", text: "Review your plan, costs and timing — with no pressure." },
-        { id: "surgery", title: "Book surgery", text: "When you feel ready — the next step toward your new smile." },
+        { id: "preAssessment", title: "Pre-assessment", text: "Share what matters so the team can personalise your call." },
+        { id: "call", title: "Pre-assessment call", text: "Speak with the team about suitability and next steps." },
+        { id: "booked", title: "Consultation booked", text: "Choose a free, no-obligation clinical consultation." },
+        { id: "consultation", title: "Consultation day", text: "Attend informed, prepared and ready to ask questions." },
       ];
 
       const FORM_MILESTONE = {
+        journey: {
+          reached: "enquiry",
+          nextMilestone: "preAssessment",
+          headline: "Your journey is clear",
+          body: "Next: a short personalised pre-assessment. Education remains open whenever you want to explore.",
+        },
+        preAssessment: {
+          reached: "preAssessment",
+          nextMilestone: "call",
+          headline: "Pre-assessment complete",
+          body: "Thanks — the team can personalise your call. We’ll share useful Education while you wait.",
+        },
+        educationGuide: {
+          reached: "preAssessment",
+          nextMilestone: "call",
+          headline: "Education is ready",
+          body: "Browse at your pace. We’ll also send a few timely suggestions before your call.",
+        },
+        waitingCheckIn: {
+          reached: "preAssessment",
+          nextMilestone: "call",
+          headline: "Your preferences are noted",
+          body: "Next: a short guide to what happens on your pre-assessment call.",
+        },
+        prepAssessment: {
+          reached: "call",
+          nextMilestone: "booked",
+          headline: "Ready for your pre-assessment call",
+          body: "After your call, we’ll notify you that consultation booking is available.",
+        },
+        bookConsultation: {
+          reached: "booked",
+          nextMilestone: "consultation",
+          headline: "Consultation requested",
+          body: "The team will confirm the date and clinic. Next: prepare calmly for your consultation.",
+        },
+        prepConsultation: {
+          reached: "booked",
+          nextMilestone: "consultation",
+          headline: "Consultation preparation complete",
+          body: "Next: see exactly what to expect on your consultation day.",
+        },
+        consultationDay: {
+          reached: "consultation",
+          nextMilestone: "consultation",
+          headline: "You know what to expect",
+          body: "Your questions and checklist are ready. The team will guide you through the day.",
+        },
+      };
+
+      const LEGACY_FORM_MILESTONE = {
         journey: {
           reached: "enquiry",
           nextMilestone: "preAssessment",
@@ -6937,9 +7265,8 @@
       function peekNextFormId() {
         for (const id of ASSESSMENT_ORDER) {
           if (completedForms.has(id)) continue;
-          if (id === "afterAssessment" && !assessmentCallThanks) return null;
-          if (id === "prepConsultation" && !consultationRequested) continue;
-          if (id === "afterConsultation" && !consultationCallThanks) return null;
+          if (id === "bookConsultation" && !assessmentCallThanks) return null;
+          if ((id === "prepConsultation" || id === "consultationDay") && !consultationRequested) continue;
           return id;
         }
         return null;
@@ -6957,22 +7284,40 @@
         if (surveyPushSent.has(formId) || visibleSurveys.has(formId)) return;
         surveyPushSent.add(formId);
         const title = TASK_META[formId] || "New survey";
+        const messages = {
+          educationGuide: "Your Education hub is ready. We’ve also emailed a few useful starting points.",
+          waitingCheckIn: "A quick check-in is ready while the team prepares for your call.",
+          prepAssessment: "See what to expect on your pre-assessment call.",
+          bookConsultation: "Your pre-assessment call is complete. Consultation booking is now open.",
+          prepConsultation: "Your consultation preparation checklist is ready.",
+          consultationDay: "See what will happen on your consultation day.",
+        };
         setTimeout(() => {
           showPush(
             title,
-            "A new survey is ready. Tap to view it on Your assessment.",
+            messages[formId] || "A new activity is ready. Tap to view it on Your assessment.",
             () => unlockSurveyFromPush(formId)
           );
         }, 900);
       }
 
+      function scheduleBookingReminder() {
+        if (consultationRequested || bookingReminderScheduled) return;
+        bookingReminderScheduled = true;
+        setTimeout(() => {
+          bookingReminderScheduled = false;
+          if (consultationRequested) return;
+          showPush(
+            "Your free consultation is ready to book",
+            "Booking stays open. We’ll send a gentle reminder every other day, and Education is always available while you decide.",
+            () => unlockSurveyFromPush("bookConsultation")
+          );
+        }, 1200);
+      }
+
       function scheduleNextAfterForm(formId) {
         if (formId === "prepAssessment") {
           scheduleAssessmentThanks();
-          return;
-        }
-        if (formId === "prepConsultation") {
-          scheduleConsultationThanks();
           return;
         }
         const nextId = peekNextFormId();
@@ -7061,13 +7406,10 @@
         for (const id of ASSESSMENT_ORDER) {
           if (completedForms.has(id)) continue;
 
-          if (id === "afterAssessment" && !assessmentCallThanks) {
+          if (id === "bookConsultation" && !assessmentCallThanks) {
             return [];
           }
-          if (id === "prepConsultation" && !consultationRequested) continue;
-          if (id === "afterConsultation" && !consultationCallThanks) {
-            return [];
-          }
+          if ((id === "prepConsultation" || id === "consultationDay") && !consultationRequested) continue;
 
           // Only show after the user has tapped the push notification
           if (!visibleSurveys.has(id)) return [];
@@ -7364,6 +7706,10 @@
           backDet.addEventListener("click", () => {
             if (resDetailReturn === "saved") openSavedItems();
             else if (resDetailReturn === "section" && activeResSectionId) openResSection(activeResSectionId);
+            else if (resDetailReturn === "questionnaire") {
+              go("questionnaire");
+              renderQuestion();
+            }
             else go("program");
           });
         }
@@ -7386,7 +7732,7 @@
       function hasOutstandingJourneyWork() {
         for (const id of ASSESSMENT_ORDER) {
           if (completedForms.has(id)) continue;
-          if ((id === "prepConsultation" || id === "afterConsultation") && !consultationRequested) {
+          if ((id === "prepConsultation" || id === "consultationDay") && !consultationRequested) {
             continue;
           }
           return true;
@@ -7470,14 +7816,14 @@
       function scheduleAssessmentThanks() {
         if (assessmentThanksScheduled || assessmentCallThanks) return;
         assessmentThanksScheduled = true;
-        surveyPushSent.add("afterAssessment");
+        surveyPushSent.add("bookConsultation");
         setTimeout(() => {
           showPush(
-            "Thank you for attending your assessment call",
-            "Tap to view your next survey on Your assessment.",
+            "Thank you for your pre-assessment call",
+            "Your free consultation is ready to book. Tap to review the next step.",
             () => {
               assessmentCallThanks = true;
-              unlockSurveyFromPush("afterAssessment");
+              unlockSurveyFromPush("bookConsultation");
             }
           );
         }, 1200);
@@ -7595,6 +7941,21 @@
 
         tabs.forEach((tab) => {
           tab.addEventListener("click", () => showTopic(tab.dataset.explore));
+        });
+      }
+
+      function bindEducationLinks(root) {
+        root.querySelectorAll("[data-education-home]").forEach((button) => {
+          button.addEventListener("click", () => go("program"));
+        });
+        root.querySelectorAll("[data-education-section][data-education-item]").forEach((button) => {
+          button.addEventListener("click", () => {
+            openResDetail(
+              button.dataset.educationSection,
+              button.dataset.educationItem,
+              "questionnaire"
+            );
+          });
         });
       }
 
@@ -8013,6 +8374,7 @@
           body.appendChild(wrap);
           bindExploreTabs(wrap);
           bindTapTiles(wrap);
+          bindEducationLinks(wrap);
           bindYtPreviews(wrap);
         } else if (step.type === "requestCall") {
           const wrap = document.createElement("div");
@@ -8025,12 +8387,16 @@
             btn.type = "button";
             btn.className = "hc-cta";
             btn.textContent =
-              step.callType === "consultation"
+              step.actionLabel ||
+              (step.callType === "consultation"
                 ? "Request a consultation call"
-                : "Request an assessment call";
+                : "Request an assessment call");
             if (!qViewOnly) {
               btn.addEventListener("click", () => {
-                if (step.callType === "consultation") consultationRequested = true;
+                if (step.callType === "consultation") {
+                  consultationRequested = true;
+                  bookingReminderScheduled = false;
+                }
                 else assessmentRequested = true;
                 renderQuestion();
               });
@@ -8042,10 +8408,10 @@
             const who =
               step.callType === "consultation" ? "consultation" : "assessment";
             wrap.innerHTML = `
-              <p class="hc-emphasis">Your ${who} call request is with the team.</p>
-              <p>A clinician will reach out from <strong>${CLINIC_PHONE_DISPLAY}</strong>. If you’d like to speak sooner, call or WhatsApp the clinic directly.</p>
+              <p class="hc-emphasis">${step.successTitle || `Your ${who} call request is with the team.`}</p>
+              <p>${step.successBody || `A clinician will reach out from <strong>${CLINIC_PHONE_DISPLAY}</strong>. If you’d like to speak sooner, call or WhatsApp the clinic directly.`}</p>
               ${clinicContactHtml()}
-              <p class="hc-note">After the call, we’ll send a notification here so you can continue your journey.</p>`;
+              <p class="hc-note">${step.callType === "consultation" ? "We’ll notify you when preparation guidance is ready." : "After the call, we’ll send a notification here so you can continue your journey."}</p>`;
           }
           body.appendChild(wrap);
         } else if (step.type === "info") {
@@ -8117,6 +8483,13 @@
           go("home");
           return;
         }
+        if (qFormId === "bookConsultation" && !consultationRequested) {
+          visibleSurveys.add("bookConsultation");
+          go("home");
+          renderHomeTasks();
+          scheduleBookingReminder();
+          return;
+        }
         if (qFormId) {
           completedForms.add(qFormId);
           renderHomeTasks();
@@ -8134,7 +8507,12 @@
 
       document.getElementById("qExit").addEventListener("click", () => {
         closeSelectSheet();
+        if (qFormId === "bookConsultation" && !consultationRequested) {
+          visibleSurveys.add("bookConsultation");
+          scheduleBookingReminder();
+        }
         go("home");
+        renderHomeTasks();
       });
 
       document.getElementById("qPrev").addEventListener("click", () => {
