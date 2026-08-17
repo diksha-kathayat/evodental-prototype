@@ -2958,17 +2958,23 @@
       }
       .education-image-grid .viz-tile {
         padding: 0;
-        overflow: hidden;
+        overflow: visible;
         text-align: left;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        cursor: default;
       }
       .education-image-grid .viz-tile img {
         display: block;
         width: 100%;
         height: 88px;
         object-fit: cover;
+        border-radius: 12px;
       }
       .education-image-grid .education-copy {
-        padding: 0.7rem 0.75rem 0.8rem;
+        padding: 0.55rem 0.1rem 0.65rem;
       }
       .viz-rail {
         display: grid;
@@ -6072,7 +6078,7 @@
                 <div class="viz">
                   <img class="evo-logo" src="https://www.evodental.com/wp-content/uploads/2025/05/evovectorlogo.svg" alt="EvoDental" />
                   <img class="viz-bleed tall journey-hero" src="https://www.evodental.com/wp-content/uploads/2025/06/dawn-side-by-side-600x600.jpg" alt="Patient smile transformation" />
-                  <p class="viz-kicker">Inquiry → consultation</p>
+                  <p class="viz-kicker">Enquiry → consultation</p>
                   <p class="viz-line">Explore at your pace. We’ll add more structure only when your consultation is booked.</p>
                   <div class="viz-rail">
                     <div class="viz-rail-item"><span class="viz-rail-num">1</span><div><strong>Tell us what matters</strong><span>A short personalised pre-assessment</span></div></div>
@@ -6108,6 +6114,7 @@
                       <div class="education-copy"><strong>Feel supported</strong><span>Anxiety and preparation guidance</span></div>
                     </div>
                   </div>
+                  <p class="viz-tag">These topics are available in the Education section of the app.</p>
                 </div>`,
             }),
           ],
@@ -6129,6 +6136,11 @@
                   </div>
                 </div>`,
             }),
+            {
+              type: "single",
+              title: "Have you gone through the Education section in the app?",
+              options: ["Yes", "No"],
+            },
             {
               type: "single",
               title: "Which best describes your situation today?",
